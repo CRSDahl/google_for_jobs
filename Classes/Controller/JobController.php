@@ -6,6 +6,7 @@ namespace Pegasus\GoogleForJobs\Controller;
 
 use Pegasus\GoogleForJobs\Domain\Model\Job;
 use Pegasus\GoogleForJobs\Domain\Repository\JobRepository;
+use Pegasus\GoogleForJobs\PageTitle\GoogleForJobsPageTitleProvider;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -76,6 +77,9 @@ class JobController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         /** @var PageRenderer $pageRenderer */
         $pageRenderer = $this->objectManager->get(PageRenderer::class);
         $pageRenderer->addHeaderData($structuredData);
+
+        $provider = GeneralUtility::makeInstance(GoogleForJobsPageTitleProvider::class);
+        $provider->setTitle($job->getTitle());
 
         if ($this->settings['job']['renderDetailTemplate']) {
             $this->view->assign('job', $job);
