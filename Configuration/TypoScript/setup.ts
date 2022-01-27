@@ -21,3 +21,10 @@ plugin.tx_googleforjobs_job {
         }
     }
 }
+
+config.pageTitleProviders {
+    googleforjobs {
+        provider = Pegasus\GoogleForJobs\PageTitle\GoogleForJobsPageTitleProvider
+        before = altPageTitle,record,seo
+    }
+}
