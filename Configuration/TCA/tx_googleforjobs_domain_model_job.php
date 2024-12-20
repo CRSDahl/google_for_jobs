@@ -38,6 +38,8 @@ return [
                 starttime, endtime,
                 --div--;LLL:EXT:google_for_jobs/Resources/Private/Language/locallang_db.xlf:tx_googleforjobs_domain_model_job.notes,
                 notes,
+                --div--;LLL:EXT:google_for_jobs/Resources/Private/Language/locallang_db.xlf:tx_googleforjobs_domain_model_job.categories,
+                categories,
             '],
     ],
     'columns' => [
@@ -488,6 +490,12 @@ return [
                 'type' => 'text',
                 'rows' => 10,
                 'cols' => 48
+            ]
+        ],
+        'categories' => [
+            'label' => 'LLL:EXT:google_for_jobs/Resources/Private/Language/locallang_db.xlf:tx_googleforjobs_domain_model_job.categories',
+            'config' => [
+                'type' => 'category'
             ]
         ],
     ],
