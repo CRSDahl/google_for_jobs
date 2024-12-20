@@ -26,5 +26,10 @@
     "replace": {
         "google_for_jobs": "self.version",
         "typo3-ter/google-for-jobs": "self.version"
+    },
+    "extra": {
+        "typo3/cms": {
+            "extension-key": "google_for_jobs"
+        }
     }
 }
