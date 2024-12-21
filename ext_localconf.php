@@ -6,7 +6,7 @@ call_user_func(
     {
 
         \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
-            'Pegasus.GoogleForJobs',
+            'google_for_jobs',
             'Job',
             [
                 \Pegasus\GoogleForJobs\Controller\JobController::class => 'list, show, listSelected, noJobFound'

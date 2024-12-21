@@ -7,7 +7,7 @@ call_user_func(
     {
 
         \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerPlugin(
-            'Pegasus.GoogleForJobs',
+            'google_for_jobs',
             'Job',
             'Jobs (Google for Jobs)'
         );
