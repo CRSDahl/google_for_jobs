@@ -9,6 +9,7 @@ use Pegasus\GoogleForJobs\Domain\Repository\JobRepository;
 use Pegasus\GoogleForJobs\PageTitle\GoogleForJobsPageTitleProvider;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use \Psr\Http\Message\ResponseInterface;
 
 /***
  *
@@ -33,9 +34,15 @@ class JobController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
      */
     protected $jobRepository = null;
 
-    public function __construct(JobRepository $jobRepository)
+    /**
+     * @var \TYPO3\CMS\Core\Page\PageRenderer
+     */
+    private $pageRenderer;
+
+    public function __construct(JobRepository $jobRepository, PageRenderer $pageRenderer)
     {
         $this->jobRepository = $jobRepository;
+        $this->pageRenderer = $pageRenderer;
     }
 
     public function indexAction(): void
@@ -47,9 +54,9 @@ class JobController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
     /**
      * actio list
      *
-     * @return void
+     * @return ResponseInterface
      */
-    public function listAction(): void
+    public function listAction(): ResponseInterface
     {
         if ($this->settings['job']['renderType'] != 'list') {
             $this->redirect('noJobFound');
@@ -60,6 +67,8 @@ class JobController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         $this->setRepositoryOrderings();
         $jobs = $this->jobRepository->findByCategories($categories, $categoryConjunction);
         $this->view->assign('jobs', $jobs);
+
+        return $this->htmlResponse();
     }
 
     /**
@@ -69,14 +78,12 @@ class JobController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
      * structured data script tag to the html head.
      *
      * @param Job $job
-     * @return void
+     * @return ResponseInterface
      */
-    public function showAction(Job $job): void
+    public function showAction(Job $job): ResponseInterface
     {
         $structuredData = $job->createStructuredData();
-        /** @var PageRenderer $pageRenderer */
-        $pageRenderer = $this->objectManager->get(PageRenderer::class);
-        $pageRenderer->addHeaderData($structuredData);
+        $this->pageRenderer->addHeaderData($structuredData);
 
         $provider = GeneralUtility::makeInstance(GoogleForJobsPageTitleProvider::class);
         $provider->setTitle($job->getTitle());
@@ -84,24 +91,27 @@ class JobController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         if ($this->settings['job']['renderDetailTemplate']) {
             $this->view->assign('job', $job);
         }
+
+        return $this->htmlResponse();
     }
 
     /**
      * Render no job found template
      *
-     * @return void
+     * @return ResponseInterface
      */
-    protected function noJobFoundAction(): void
+    protected function noJobFoundAction(): ResponseInterface
     {
+        return $this->htmlResponse();
     }
 
     /**
      * action listSelected
      *
      * Renders a list view of selected jobs.
-     * @return void
+     * @return ResponseInterface
      */
-    public function listSelectedAction(): void
+    public function listSelectedAction(): ResponseInterface
     {
         /** @var Job[] $jobs */
         $jobs = [];
@@ -115,6 +125,7 @@ class JobController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         }
 
         $this->view->assign('jobs', $jobs);
+        return $this->htmlResponse();
     }
 
     /**
